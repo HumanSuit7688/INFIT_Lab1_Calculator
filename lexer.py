@@ -2,19 +2,21 @@ class Lexer:
     def __init__(self, expression: str):
         self.expression = expression
         self.alph_numbers = '0123456789.'
-        self.alph_operators = '+-*/'
+        self.alph_operators = '+-*/|'
         self.alph_brackets = '()'
+        self.alph_functions = 'min,'
         self.dict_operator_token = {
             '+': 'plus',
             '-': 'minus',
             '*': 'multiply',
             '/': 'divide',
+            '|': 'bitwise_or'
         }
         self.dict_bracket_token = {
             '(': 'open_br',
             ')': 'close_br',
         }
-        self.alphabet_main = '0123456789+-*/(). '
+        self.alphabet_main = self.alph_numbers + self.alph_operators + self.alph_brackets + self.alph_functions + ' '
 
     def check_alphabet_expression(self):
         """Проверка символов выражения на соответствие алфавиту"""
@@ -29,14 +31,14 @@ class Lexer:
         if not s:
             raise ValueError("Выражение пустое")
 
-        s_rep = s.replace('-', '+').replace('*', '+').replace('/', '+')
+        s_rep = s.replace('-', '+').replace('*', '+').replace('/', '+').replace('|', '+')
         if '++' in s_rep:
             raise ValueError("Два оператора подряд")
 
-        if s[0] in '*/':
+        if s[0] in '*/|':
             raise ValueError("Выражение не может начинаться с '*' или '/'")
 
-        if s[-1] in '+-*/':
+        if s[-1] in '+-*/|':
             raise ValueError("Выражение не может заканчиваться оператором")
 
         if s.count('(') != s.count(')'):
@@ -66,17 +68,21 @@ class Lexer:
 
         for i in range(len(s)):
             temp_char = s[i]
+
             if temp_char == ' ':
                 continue
+
             elif temp_char in self.alph_numbers:
                 num += temp_char
                 if i == (len(s) - 1) or s[i + 1] not in self.alph_numbers:
                     token = 'number'
                     res_list.append((token, self.convert_num(num)))
                     num = ''
+
             elif temp_char in self.alph_operators:
                 token = self.dict_operator_token.get(temp_char)
                 res_list.append((token, temp_char))
+
             elif temp_char in self.alph_brackets:
                 token = self.dict_bracket_token.get(temp_char)
                 res_list.append((token, temp_char))

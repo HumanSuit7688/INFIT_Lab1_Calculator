@@ -50,7 +50,7 @@ class Parser:
         total = self.parse_term()
         operator = self.current_token()[0]
 
-        while operator in ['plus', 'minus',]:
+        while operator in ['plus', 'minus', 'bitwise_or']:
             self.advance()
             value = self.parse_term()
 
@@ -58,6 +58,8 @@ class Parser:
                 total += value
             elif operator == 'minus':
                 total -= value
+            elif operator == 'bitwise_or':
+                total |= value
 
             operator = self.current_token()[0]
 
