@@ -51,12 +51,10 @@ class Lexer:
         if '()' in s:
             raise ValueError("Пустые скобки")
 
-        k_m = s.count('m')
-        k_i = s.count('i')
-        k_n = s.count('n')
-        k_min = s.count('min')
         if 'm' in s or 'i' in s or 'n' in s:
-            if k_min != k_i or k_min != k_m or k_min != k_n:
+            import re
+            matches = re.findall(r'min', s)
+            if len(matches) * 3 != s.count('m') + s.count('i') + s.count('n'):
                 raise ValueError("Неправильно введена функция")
 
     def convert_num(self, str_num: str):
