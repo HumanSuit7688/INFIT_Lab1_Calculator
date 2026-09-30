@@ -9,6 +9,23 @@ class Parser:
     def advance(self):
         self.pos += 1
 
+    def parse_function_min(self):
+        token = self.current_token()
+        if token[0] == 'open_br':
+            self.advance()
+            list_numbers = []
+            value = 0
+            token = self.current_token()
+            while(token[0] != 'close_br'):
+                if token[0] == 'number':
+                    list_numbers.append(token[1])
+                self.advance()
+                token = self.current_token()
+            value = min(list_numbers)
+            return value
+        else:
+            raise ValueError("Неправильно написана функция (отсутствует скобка в начале)")
+
     def parse_factor(self):
         token = self.current_token()
 
@@ -18,23 +35,29 @@ class Parser:
             return value
 
         elif token[0] == 'open_br':
-            self.advance()  # пропустить '('
-            value = self.parse_expression()  # рекурсивно разобрать выражение внутри
-            self.advance()  # пропустить ')'
+            self.advance()
+            value = self.parse_expression()
+            self.advance()
             return value
 
         elif token[0] == 'minus':
-            self.advance()  # пропустить '-'
+            self.advance()
             value = self.parse_factor() * (-1)
             return value
+
+        elif token[0] == 'min':
+            self.advance()
+            value = self.parse_function_min()
+            return value
+
 
     def parse_term(self):
         product = self.parse_factor()
         operator = self.current_token()[0]
 
         while operator in ['multiply', 'divide']:
-            self.advance()  # ✅ пропускаем оператор (* или /)
-            value = self.parse_factor()  # теперь читаем число
+            self.advance()
+            value = self.parse_factor()
 
             if operator == 'multiply':
                 product *= value

@@ -72,7 +72,7 @@ class Lexer:
         self.check_alphabet_expression()
         self.check_typo_expression()
 
-        s = self.expression.strip()
+        s = self.expression
         s = s.replace(' ', '')
         res_list = []
         i = 0
