@@ -57,6 +57,20 @@ class Lexer:
             if len(matches) * 3 != s.count('m') + s.count('i') + s.count('n'):
                 raise ValueError("Неправильно введена функция")
 
+        if ',' in s:
+            for char in '+-*/|':
+                if f',{char}' in s:
+                    raise ValueError(f"После запятой не может стоять {char}")
+                if f'{char},' in s:
+                    raise ValueError(f"Перед запятой не может стоять {char}")
+
+        if '.' in s:
+            for char in '()+-*/|min':
+                if f'.{char}' in s:
+                    raise ValueError(f"После точки не может стоять {char}")
+                if f'{char}.' in s:
+                    raise ValueError(f"Перед точкой не может стоять {char}")
+
     def convert_num(self, str_num: str):
         """Конвертация строки в число"""
         try:
