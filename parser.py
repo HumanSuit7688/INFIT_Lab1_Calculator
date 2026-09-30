@@ -20,13 +20,12 @@ class Parser:
 
             list_numbers = []
             while(token[0] != 'close_br'):
-                if token[0] == 'comma':
-                    self.advance()
-                    token = self.current_token()
 
-                elif token[0] == 'number':
-                    value = token[1]
-                    list_numbers.append(value)
+                value = self.parse_expression()
+                list_numbers.append(value)
+                token = self.current_token()
+
+                if token[0] == 'comma':
                     self.advance()
                     token = self.current_token()
 
@@ -40,9 +39,9 @@ class Parser:
                 elif token[0] == 'min':
                     self.advance()
                     value = self.parse_function_min()
+                    list_numbers.append(value)
                     self.advance()
                     token = self.current_token()
-
             value = min(list_numbers)
             return value
 
