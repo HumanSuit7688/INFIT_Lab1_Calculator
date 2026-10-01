@@ -15,8 +15,6 @@ class Parser:
         if token[0] == 'open_br':
             self.advance()
             token = self.current_token()
-            if token[0] == 'close_br':
-                raise ValueError('Функция min() требует хотя бы один аргумент')
 
             list_numbers = []
             while(token[0] != 'close_br'):
@@ -29,19 +27,6 @@ class Parser:
                     self.advance()
                     token = self.current_token()
 
-                elif token[0] == 'open_br':
-                    self.advance()
-                    value = self.parse_expression()
-                    list_numbers.append(value)
-                    self.advance()
-                    token = self.current_token()
-
-                elif token[0] == 'min':
-                    self.advance()
-                    value = self.parse_function_min()
-                    list_numbers.append(value)
-                    self.advance()
-                    token = self.current_token()
             value = min(list_numbers)
             return value
 
@@ -93,10 +78,23 @@ class Parser:
 
 
     def parse_expression(self):
+        total = self.parse_additive()
+        operator = self.current_token()[0]
+
+        while operator == 'bitwise_or':
+            self.advance()
+            value = self.parse_additive()
+            total |= value
+
+            operator = self.current_token()[0]
+
+        return total
+
+    def parse_additive(self):
         total = self.parse_term()
         operator = self.current_token()[0]
 
-        while operator in ['plus', 'minus', 'bitwise_or']:
+        while operator in ['plus', 'minus']:
             self.advance()
             value = self.parse_term()
 
@@ -104,8 +102,6 @@ class Parser:
                 total += value
             elif operator == 'minus':
                 total -= value
-            elif operator == 'bitwise_or':
-                total |= value
 
             operator = self.current_token()[0]
 
