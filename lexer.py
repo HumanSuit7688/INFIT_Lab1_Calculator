@@ -58,7 +58,7 @@ class Lexer:
                 raise ValueError("Неправильно введена функция")
 
         if ',' in s:
-            for char in '+-*/|':
+            for char in '+*/|':
                 if f',{char}' in s:
                     raise ValueError(f"После запятой не может стоять {char}")
                 if f'{char},' in s:
