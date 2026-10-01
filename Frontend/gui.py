@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
-from lexer import Lexer
-from parser import Parser
+from Backend.lexer import Lexer
+from Backend.parser import Parser
 
 
 def calculate(expression):
@@ -63,7 +63,7 @@ class CalculatorGUI:
         self.root.bind('<Escape>', lambda e: self.on_click('C'))
 
     def on_click(self, char):
-        """нажатия на кнопки приложения"""
+        """нажатия на кнопки в приложении"""
         if char == 'C':
             self.expression = ""
             self.entry.delete(0, tk.END)
@@ -99,9 +99,3 @@ class CalculatorGUI:
             self.result_label.config(text=f"Результат: {result}", foreground='black')
         except Exception as e:
             self.result_label.config(text=f"Ошибка: {e}", foreground='red')
-
-
-if __name__ == '__main__':
-    root = tk.Tk()
-    CalculatorGUI(root)
-    root.mainloop()

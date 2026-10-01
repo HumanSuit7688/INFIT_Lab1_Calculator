@@ -1,5 +1,6 @@
-from parser import Parser
-from lexer import Lexer
+from Backend.parser import Parser
+from Backend.lexer import Lexer
+
 
 def calculate(expression):
     """Вычисление значения арифметического выражения"""
@@ -11,11 +12,9 @@ def calculate(expression):
 
     return result
 
-def tokenize(expression):
-    lexer = Lexer(expression)
-    tokens = lexer.tokenize()
-    return tokens
-
 if __name__ == '__main__':
-    tokens = tokenize(input('Enter expression: '))
-    print(tokens)
+    expression = input('Enter expression: ')
+    while expression:
+        result = calculate(expression)
+        print(result)
+        expression = input('Enter expression: ')
