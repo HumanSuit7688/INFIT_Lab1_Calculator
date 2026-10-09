@@ -1,6 +1,6 @@
 class Lexer:
     def __init__(self, expression: str):
-        self.expression = expression
+        self.expression = expression.replace(' ', '')
         self.alph_numbers = '0123456789.'
         self.alph_operators = '+-*/|,'
         self.alph_brackets = '()'
@@ -50,6 +50,13 @@ class Lexer:
 
         if '()' in s:
             raise ValueError("Пустые скобки")
+
+        if ')(' in s:
+            raise ValueError(")( не могут стоять подряд")
+
+        for x in self.alph_numbers:
+            if f'{x}(' in s:
+                raise ValueError(f"{x}( не могут стоять подряд")
 
         if 'm' in s or 'i' in s or 'n' in s:
             import re
